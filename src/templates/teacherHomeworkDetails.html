@@ -1,0 +1,67 @@
+{% extends "teacherCourse.html" %}
+{% block page_content %}
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#homeworkDetails" class="displayBlock">{{ homework.title }}</a>
+            </h3>
+        </div>
+        <div id="homeworkDetails" class="panel-collapse collapse in">
+             <div class="panel-body">
+                <pre class="textSize">{{ homework.content }}</pre>
+                {% if student_homeworks %}
+                    <h4>学生所交作业如下</h4>
+                    <div class="table-responsive text-center">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">学号</th>
+                                    <th class="text-center">姓名</th>
+                                    <th class="text-center">作业</th>
+                                    <th class="text-center">上传时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student_homework in student_homeworks %}
+                                    <tr>
+                                        <td>{{ student_homework.student.id }}</td>
+                                        <td>{{ student_homework.student.name }}</td>
+                                        <td>
+                                            <a href = "{{ url_for('download_homework', id = student_homework.id, name = student_homework.name) }}">{{ student_homework.name }}</a>
+                                        </td>
+                                        <td>{{ student_homework.time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <h5>目前还没有学生上传作业</h5>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#feedback" class="displayBlock">作业反馈</a>
+            </h3>
+        </div>
+        <div id="feedback" class="panel-collapse collapse">
+             <div class="panel-body">
+                {% if feedbacks %}
+                    {% for feedback in feedbacks %}
+                        <ul class="list-inline">
+                            <li><strong>{{ feedback.student.id }}</strong></li>
+                            <li><strong>{{ feedback.student.name }}</strong></li>
+                            <li><em>{{ feedback.time.strftime('%Y-%m-%d %H:%M:%S') }}</em></li>
+                        </ul>
+                        <pre>{{ feedback.content }}</pre>
+                    {% endfor %}
+                {% else %}
+                    <h4>目前还没有任何反馈</h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

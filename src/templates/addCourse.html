@@ -1,0 +1,58 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/teachingWeb.css')}}">
+{% endblock %}
+{% block title %}TeachingWeb System{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> 
+                <span class="sr-only">Toggle navigation</span> 
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('teacher') }}">TeachingWeb System</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href = "{{ url_for('teacher') }}">主页</a></li>
+                <li><a href = "{{ url_for('profile') }}">个人信息</a></li>
+                <li><a href = "{{ url_for('add_course') }}">增加课程</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href = "{{ url_for('logout') }}">
+                        注销
+                        <span></span>
+                        <i class="glyphicon glyphicon-off" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-success alert-dismissible" role = "alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <ul>
+                {% for msg in messages %}
+                    <li>{{ msg }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+    <div class = "formPosition text-center">
+        {{ wtf.quick_form(form, form_type = "horizontal",horizontal_columns=('sm', 4, 3)) }}
+    </div>
+</div>
+{% endblock %}

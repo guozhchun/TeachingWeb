@@ -1,0 +1,12 @@
+.box
+{
+	padding-top: 60px;
+}
+
+.login
+{
+	padding-top:30px; 
+	padding-bottom:30px; 
+	background-color:#eee; 
+	max-width:600px
+}

@@ -1,0 +1,103 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/teachingWeb.css')}}">
+{% endblock %}
+{% block title %}TeachingWeb System{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> 
+                <span class="sr-only">Toggle navigation</span> 
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            {% if user.get_tablename() == 'teacher' %}
+                <a class="navbar-brand" href="{{ url_for('teacher') }}">TeachingWeb System</a>
+            {% else %}
+                <a class="navbar-brand" href="{{ url_for('student') }}">TeachingWeb System</a>
+            {% endif %}
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                {% if user.get_tablename() == 'teacher' %}
+                    <li><a href = "{{ url_for('teacher') }}">主页</a></li>
+                {% else %}
+                    <li><a href = "{{ url_for('student') }}">主页</a></li>
+                {% endif %}
+                <li><a href = "{{ url_for('profile') }}">个人信息</a></li>
+                {% if user.get_tablename() == 'teacher' %}
+                    <li><a href = "{{ url_for('add_course') }}">增加课程</a></li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href = "{{ url_for('logout') }}">
+                        注销
+                        <span></span>
+                        <i class="glyphicon glyphicon-off" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-success alert-dismissible" role = "alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <ul>
+                {% for msg in messages %}
+                    <li>{{ msg }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class = "formPosition">
+        <form class="form form-horizontal" method="post" role="form">
+            {{ form.hidden_tag() }}
+            {% if user.get_tablename() == 'teacher' %}
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for = "id">工号</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" id = "id" name = "id" type = "text" value = "{{ user.id - 1000000000000000 }}" disabled="true">
+                    </div>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for = "id">学号</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" id = "id" name = "id" type = "text" value = "{{ user.id }}" disabled="true">
+                    </div>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <label class="control-label col-sm-4" for = "name">姓名</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id = "name" name = "name" type = "text" value = "{{ user.name }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for = "email">邮箱</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id = "email" name = "email" type = "text" value = "{{ user.email }}">
+                </div>
+            </div>
+            {{ wtf.form_field(form.password, form_type = "horizontal",horizontal_columns=('sm', 4, 3)) }}
+            {{ wtf.form_field(form.confirm, form_type = "horizontal",horizontal_columns=('sm', 4, 3)) }}
+            <div class="text-center">
+                {{ wtf.form_field(form.submit, form_type = "horizontal",horizontal_columns=('sm', 4, 3)) }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

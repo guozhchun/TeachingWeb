@@ -1,0 +1,71 @@
+{% extends "teacherCourse.html" %}
+{% block flash %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-warning alert-dismissible" role = "alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <ul>
+                {% for msg in messages %}
+                    <li>{{ msg }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#releaseNotice" class="displayBlock">上传课件</a>
+            </h3>
+        </div>
+        <div id="releaseNotice" class="panel-collapse collapse">
+             <div class="panel-body">
+                <h4>支持上传的文件格式是 ["zip", "rar", "doc", "txt", "docx", "pdf", "ppt", "pptx"]</h4>
+                <h4><strong>注意：如果上传的是同名文件，则会覆盖原先的文件</strong></h4>
+                <br>
+                {{ wtf.quick_form(form, form_type = "horizontal",horizontal_columns=('sm', 3, 4)) }}
+            </div>
+        </div>
+    </div>
+    {% if resources %}
+        <div class="table-responsive text-center">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">课件</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resource in resources %}
+                        <tr>
+                            <td><a href = " {{ url_for('download_resource', id = resource.id, name = resource.name) }}">{{ resource.name }}</a></td>
+                            <td><button class = "btn btn-danger" data-toggle = "modal" data-target = "#deleteModal{{ resource.id }}">删除</button></td>
+                        </tr>
+                        <!-- 删除确认消息框 -->
+                        <div class="modal fade modalPosition" id="deleteModal{{ resource.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">删除确认</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        你确定要删除课件《 <strong>{{ resource.name }}</strong> 》吗？
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary buttonDistance" data-dismiss="modal">取消</button>
+                                        <a class="btn btn-primary" href="{{ url_for('delete_resource', id = resource.id) }}">确定</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div>
+                        </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,51 @@
+body
+{
+	padding-top: 70px;
+}
+
+.modalPosition
+{
+	padding-top: 10%;
+}
+
+.buttonDistance
+{
+	margin-right: 5%
+}
+
+.displayBlock
+{
+	display: block;
+	font-size: 22px;
+}
+
+.formPosition
+{
+	margin-top: 5%;
+}
+
+.floatRight
+{
+	float: right;
+}
+
+.textSize
+{
+	font-size: 18px;
+}
+
+.hiddenDiv
+{
+	position: absolute;
+	visibility: hidden;
+}
+
+.noticeColor
+{
+	background-color: #EEEEDD;
+}
+
+.pageBoxWidth
+{
+	width: 30px;
+}

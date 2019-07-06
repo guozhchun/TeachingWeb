@@ -1,0 +1,95 @@
+{% extends "bootstrap/base.html" %}
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/teachingWeb.css')}}">
+{% endblock %}
+{% block title %}TeachingWeb System{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> 
+                <span class="sr-only">Toggle navigation</span> 
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('student') }}">TeachingWeb System</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href = "{{ url_for('student') }}">主页</a></li>
+                <li><a href = "{{ url_for('profile') }}">个人信息</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href = "{{ url_for('logout') }}">
+                        注销
+                        <span></span>
+                        <i class="glyphicon glyphicon-off" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-success alert-dismissible" role = "alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <ul>
+                {% for msg in messages %}
+                    <li>{{ msg }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+    <h2>
+    {% if user.name %}
+        {{ user.name }}
+    {% endif %}
+    你好！
+    </h2>
+    <br>
+    {% if courses %}
+    <h3>你的课程如下:</h3>
+    <br>
+    <div class="table-responsive text-center">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">课程名字</th>
+                    <th class="text-center">授课教师</th>
+                    <th class="text-center">教师邮箱</th>
+                    <th class="text-center">课程时间</th>
+                    <th class="text-center">课程地点</th>
+                    <th class="text-center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                    <tr>
+                        <td><a href = "{{ url_for('student_course', id = course.id) }}">{{ course.name }}</a></td>
+                        <td>{{ course.teacher.name }}</td>
+                        <td>{{ course.teacher.email }}</td>
+                        <td>{{ course.time }}</td>
+                        <td>{{ course.location }}</td>
+                        <td>
+                            <a class = "btn btn-info buttonDistance" href = "{{ url_for('student_course', id = course.id) }}">查看</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <h3>你目前还没有任何课程</h3>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "studentCourse.html" %}
+{% block page_content %}
+    {% if homeworks %}
+        <h3></h3>
+        <div class="table-responsive text-center">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">作业</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for homework in homeworks %}
+                        <tr>
+                            <td><a href = "{{ url_for('student_homework_details', id = homework.id) }}">{{ homework.title }}</a></td>
+                            <td><a href = "{{ url_for('student_homework_details', id = homework.id) }}" class="btn btn-info">查看</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <h3>目前该课程还没有任何作业</h3>
+    {% endif %}
+{% endblock %}

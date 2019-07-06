@@ -1,0 +1,52 @@
+{% extends "adminBase.html" %}
+{% block page_content %}
+    <form class="form form-horizontal" method="post" enctype="multipart/form-data" role="form">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="addtype">方式</label>
+            <div class="col-sm-3">
+                <select class="form-control" id = "addtype" name = "addtype" onchange="changeAddPersonType()">
+                    <option value="single">单个增加</option>
+                    <option value="batch">批量增加</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id = "singlePersonId">
+            <label class="control-label col-sm-4" for="id">工号</label>
+            <div class="col-sm-3">
+                <input class="form-control" id = "id" name = "id" type = "text" required>
+            </div>
+        </div>
+        <div class="form-group" id = "singlePersonName">
+            <label class="control-label col-sm-4" for="name">姓名</label>
+            <div class="col-sm-3">
+                <input class="form-control" id = "name" name = "name" type = "text">
+            </div>
+        </div>
+        <div class="form-group" id = "singlePersonEmail">
+            <label class="control-label col-sm-4" for="email">邮箱</label>
+            <div class="col-sm-3">
+                <input class="form-control" id = "email" name = "email" type = "text">
+            </div>
+        </div>
+        <div class="form-group" id = "singlePersonPassword">
+            <label class="control-label col-sm-4" for="password">密码</label>
+            <div class="col-sm-3">
+                <input class="form-control" id = "password" name = "password" type = "text">
+                <span class = "help-block">密码为空时，默认密码为工号</span>
+            </div>
+        </div>
+        <div class="form-group hiddenDiv" id = "batchPerson">
+            <label class="control-label col-sm-4" for="file">文件</label>
+            <div class="col-sm-3">
+                <input id = "file" name = "file" type = "file">
+                <span class = "help-block">
+                    文件仅支持xls, xlsx格式，在excel表中第一列为教师工号，第二列为姓名，第三列为邮箱，第四列为密码。除第一列工号不能为空外，其他三列可以为空，密码为空时，默认密码为工号。密码不为空时，请确保单元格格式是文本格式，否则会出错
+                    <br>
+                    <a href = "{{ url_for('download_sample', name = 'teacher_sample.xls') }}">批量增加文件样本下载</a>
+                </span>
+            </div>
+        </div>
+        {{ wtf.form_field(form.submit, form_type = "horizontal",horizontal_columns=('sm', 4, 3)) }}
+    </form>
+{% endblock %}

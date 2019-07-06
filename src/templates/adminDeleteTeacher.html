@@ -1,0 +1,32 @@
+{% extends "adminBase.html" %}
+{% block page_content %}
+    <h3 class="text-center">删除教师将会删除与此教师相关的所有东西，包括教师所开的课程，上传的课件等</h3>
+    <div class="formPosition">
+        <form class="form form-horizontal" method="post" enctype="multipart/form-data" role="form">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="deletetype">方式</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id = "deletetype" name = "deletetype" onchange="changeDeletePersonType()">
+                        <option value="single">单个删除</option>
+                        <option value="batch">批量删除</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id = "singlePerson">
+                <label class="control-label col-sm-4" for="id">工号</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id = "id" name = "id" type = "text" required>
+                </div>
+            </div>
+            <div class="form-group hiddenDiv" id = "batchPerson">
+                <label class="control-label col-sm-4" for="file">文件</label>
+                <div class="col-sm-3">
+                    <input id = "file" name = "file" type = "file">
+                    <span class = "help-block">文件仅支持xls, xlsx格式，在excel表中第一列为教师工号</span>
+                </div>
+            </div>
+            {{ wtf.form_field(form.submit, form_type = "horizontal",horizontal_columns=('sm', 4, 3)) }}
+        </form>
+    </div>
+{% endblock %}

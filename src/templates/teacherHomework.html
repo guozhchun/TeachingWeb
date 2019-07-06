@@ -1,0 +1,65 @@
+{% extends "teacherCourse.html" %}
+{% block page_content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#releaseHomework" class="displayBlock">发布作业</a>
+            </h3>
+        </div>
+        <div id="releaseHomework" class="panel-collapse collapse">
+             <div class="panel-body">
+                <form class="form form-horizontal" method="post" role="form">
+                    {{ form.hidden_tag() }}
+                    {{ wtf.form_field(form.title, form_type = "horizontal",horizontal_columns=('sm', 3, 3)) }}
+                    <div class="form-group required">
+                        <label class="control-label col-sm-3" for = "content">内容</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id = "content" name = "content" rows = "5" required></textarea>
+                        </div>
+                    </div>
+                    {{ wtf.form_field(form.submit, form_type = "horizontal",horizontal_columns=('sm', 3, 3), button_map = {'submit': 'primary'}) }}
+                </form>
+            </div>
+        </div>
+    </div>
+    {% if homeworks %}
+        <div class="table-responsive text-center">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">已发布的作业</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for homework in homeworks %}
+                        <tr>
+                            <td><a href = " {{ url_for('teacher_homework_details', id = homework.id) }} ">{{ homework.title }}</a></td>
+                            <td><button class = "btn btn-danger" data-toggle = "modal" data-target = "#deleteModal{{ homework.id }}">删除</button></td>
+                        </tr>
+                        <!-- 删除确认消息框 -->
+                        <div class="modal fade modalPosition" id="deleteModal{{ homework.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">删除确认</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        删除作业《 <strong>{{ homework.title }}</strong> 》将删除该作业下所有学生上传的文件和反馈，是否确定要删除？
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary buttonDistance" data-dismiss="modal">取消</button>
+                                        <a class="btn btn-primary" href = "{{ url_for('delete_homework', id = homework.id) }}">确定</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div>
+                        </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <h3>你还没有发布任何作业</h3>
+    {% endif %}
+{% endblock %}

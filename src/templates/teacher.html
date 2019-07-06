@@ -1,0 +1,110 @@
+{% extends "bootstrap/base.html" %}
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/teachingWeb.css')}}">
+{% endblock %}
+{% block title %}TeachingWeb System{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> 
+                <span class="sr-only">Toggle navigation</span> 
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('teacher') }}">TeachingWeb System</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href = "{{ url_for('teacher') }}">主页</a></li>
+                <li><a href = "{{ url_for('profile') }}">个人信息</a></li>
+                <li><a href = "{{ url_for('add_course') }}">增加课程</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href = "{{ url_for('logout') }}">
+                        注销
+                        <span></span>
+                        <i class="glyphicon glyphicon-off" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-success alert-dismissible" role = "alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <ul>
+                {% for msg in messages %}
+                    <li>{{ msg }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+    <h2>
+    {% if user.name %}
+        {{ user.name }}
+    {% endif %}
+    你好！
+    </h2>
+    <br>
+    {% if courses %}
+    <h3>你所教授的课程如下:</h3>
+    <br>
+    <div class="table-responsive text-center">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">课程名字</th>
+                    <th class="text-center">课程时间</th>
+                    <th class="text-center">课程地点</th>
+                    <th class="text-center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                    <tr>
+                        <td><a href = "{{ url_for('teacher_course', id = course.id) }}">{{ course.name }}</a></td>
+                        <td>{{ course.time }}</td>
+                        <td>{{ course.location }}</td>
+                        <td>
+                            <a class = "btn btn-info buttonDistance" href = "{{ url_for('teacher_course', id = course.id) }}">查看</a>
+                            <a class = "btn btn-danger"  data-toggle = "modal" data-target = "#deleteModal{{ course.id }}">删除</a>
+                        </td>
+                    </tr>
+                    <!-- 删除确认消息框 -->
+                    <div class="modal fade modalPosition" id="deleteModal{{ course.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">删除确认</h4>
+                                </div>
+                                <div class="modal-body">
+                                    此操作将会删除课程《 <strong>{{ course.name }}</strong> 》所有的资源，包括课件、学生上传的作业和公告等，是否确认删除？
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary buttonDistance" data-dismiss="modal">取消</button>
+                                    <a class="btn btn-primary" href="{{ url_for('delete_course', id = course.id) }}">确定</a>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div>
+                    </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <h3>你目前还没有教授任何课程</h3>
+    {% endif %}
+</div>
+{% endblock %}

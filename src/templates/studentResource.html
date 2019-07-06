@@ -1,0 +1,26 @@
+{% extends "studentCourse.html" %}
+{% block page_content %}
+    {% if resources %}
+        <h3></h3>
+        <div class="table-responsive text-center">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">课件</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resource in resources %}
+                        <tr>
+                            <td><a href = "{{ url_for('download_resource', id = resource.id, name = resource.name) }}">{{ resource.name }}</a></td>
+                            <td><a href = "{{ url_for('download_resource', id = resource.id, name = resource.name) }}" class="btn btn-info">下载</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <h3>目前该课程还没有任何课件</h3>
+    {% endif %}
+{% endblock %}

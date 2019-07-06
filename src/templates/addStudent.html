@@ -1,0 +1,46 @@
+{% extends "teacherCourse.html" %}
+{% block flash %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-danger alert-dismissible" role = "alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <ul>
+                {% for msg in messages %}
+                    <li>{{ msg }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="formPosition">
+        <form class="form form-horizontal" method="post" enctype="multipart/form-data" role="form">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="addtype">添加方式</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id = "addtype" name = "addtype" onchange="changeAddType()">
+                        <option value="single">单个增加</option>
+                        <option value="batch">批量增加</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id = "singleStudent">
+                <label class="control-label col-sm-4" for="student_id">学生学号</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id = "student_id" name = "student_id" type = "text" required>
+                </div>
+            </div>
+            <div class="form-group hiddenDiv" id = "batchStudent">
+                <label class="control-label col-sm-4" for="student_file">学生名单</label>
+                <div class="col-sm-3">
+                    <input id = "student_file" name = "student_file" type = "file">
+                    <span class = "help-block">文件仅支持xls, xlsx格式，在excel表中第一列为学生学号</span>
+                </div>
+            </div>
+            {{ wtf.form_field(form.submit, form_type = "horizontal",horizontal_columns=('sm', 4, 3)) }}
+        </form>
+    </div>
+{% endblock %}

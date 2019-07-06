@@ -1,0 +1,29 @@
+{% extends "teacherCourse.html" %}
+{% block page_content %}
+	<div class = "formPosition">
+        <form class="form form-horizontal" method="post" role="form">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label class="control-label col-sm-4" for = "name">课程名称</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id = "name" name = "name" type = "text" value = "{{ course.name }}" disabled="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for = "time">课程时间</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id = "time" name = "time" type = "text" value = "{{ course.time }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for = "location">课程地点</label>
+                <div class="col-sm-3">
+                    <input class="form-control" id = "location" name = "location" type = "text" value = "{{ course.location }}">
+                </div>
+            </div>
+            <div class="text-center">
+                {{ wtf.form_field(form.submit, form_type = "horizontal",horizontal_columns=('sm', 4, 3)) }}
+            </div>
+        </form>
+    </div>
+{% endblock %}

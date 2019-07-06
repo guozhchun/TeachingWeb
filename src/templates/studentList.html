@@ -1,0 +1,58 @@
+{% extends "adminBase.html" %}
+{% block page_content %}
+    {% if students.items %}
+        <h3>学生名单如下：</h3>
+        <form class="form" method="post" role = "form" onsubmit="return deleteConfirm('删除学生将会删除与此学生相关的所有东西，包括学生的选课记录、上传的作业和反馈等。是否确认删除?')">
+            {{ checkBoxForm.hidden_tag() }}
+            {{ wtf.form_field(checkBoxForm.submit, button_map = {'submit': 'danger'}) }}
+            <div class="table-responsive text-center" id = "divHeight">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><input type="checkbox" id = "selectAll" onclick="checkAll(this)"></th>
+                            <th class="text-center">学号</th>
+                            <th class="text-center">姓名</th>
+                            <th class="text-center">邮箱</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students.items %}
+                            <tr>
+                                <td><input type="checkbox" name = "checkItem" value="{{ student.id }}"></td>
+                                <td>{{ student.id }}</td>
+                                <td>{{ student.name }}</td>
+                                <td>{{ student.email }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        {% if students.pages > 1 %}
+            <form class="form" method="post" role = "form" onsubmit="return validate_form(this, {{ students.pages }});">
+                {{ form.hidden_tag() }}
+                <ul class="pager">
+                    <li><a href="{{ url_for('student_list') }}">首页</a></li>
+                    {% if students.has_prev %}
+                        <li><a href="{{ url_for('student_list', page = students.prev_num) }}">上一页</a></li>
+                    {% else %}
+                        <li class="disabled"><a href="">上一页</a></li>
+                    {% endif %}
+                    <li class="disabled"><a>{{ students.page }} / {{ students.pages }}</a></li>
+                    {% if students.has_next %}
+                        <li><a href="{{ url_for('student_list', page = students.next_num) }}">下一页</a></li>
+                    {% else %}
+                        <li class="disabled"><a href="">下一页</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('student_list', page = students.pages) }}">末页</a></li>
+                    转到
+                    <input type="text" class="pageBoxWidth" id="page" name="page" required>
+                    页
+                    <button type="submit" id="submit" name="submit">GO</button>
+                </ul>
+            </form>
+        {% endif %}
+    {% else %}
+        <h3>目前还没有任何学生</h3>
+    {% endif %}
+{% endblock %}

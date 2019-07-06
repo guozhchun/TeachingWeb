@@ -1,0 +1,54 @@
+{% extends "studentCourse.html" %}
+{% block page_content %}
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#homeworkDetails" class="displayBlock">{{ homework.title }}</a>
+            </h3>
+        </div>
+        <div id="homeworkDetails" class="panel-collapse collapse in">
+             <div class="panel-body">
+                <pre class="textSize">{{ homework.content }}</pre>
+                <p>上传作业的格式只能是["zip", "rar", "doc", "txt", "docx", "pdf", "ppt", "pptx"]</p>
+                <p><strong>注意：</strong>重复上传的文件会覆盖原来的文件</p>
+                <br>
+                {% if student_homework %}
+                    <p>
+                        已上传作业：
+                        <a href = "{{ url_for('download_homework', id = student_homework.id, name = student_homework.name) }}">{{ student_homework.name }}</a>
+                    </p>
+                {% endif %}
+                {{ wtf.quick_form(form, form_type = "horizontal",horizontal_columns=('lg', 2, 2)) }}
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#feedback" class="displayBlock">作业反馈</a>
+            </h3>
+        </div>
+        <div id="feedback" class="panel-collapse collapse">
+             <div class="panel-body">
+                <form class="form form-horizontal" method="post" role="form">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group required">
+                        <label class="control-label col-sm-3" for = "content">内容</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" id = "content" name = "content" rows = "5" placeholder = "有什么想吐槽的，就写在这里发泄吧~" required></textarea>
+                        </div>
+                    </div>
+                    {{ wtf.form_field(feedbackForm.submit, form_type = "horizontal",horizontal_columns=('sm', 3, 3), button_map = {'submit': 'primary'}) }}
+                </form>
+                {% for feedback in feedbacks %}
+                    <ul class="list-inline">
+                        <li><strong>{{ feedback.student.id }}</strong></li>
+                        <li><strong>{{ feedback.student.name }}</strong></li>
+                        <li><em>{{ feedback.time.strftime('%Y-%m-%d %H:%M:%S') }}</em></li>
+                    </ul>
+                    <pre>{{ feedback.content }}</pre>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
